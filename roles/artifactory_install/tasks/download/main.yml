@@ -1,0 +1,18 @@
+---
+- name: Check for version installed
+  set_fact: 
+- name: Download Zip tasks
+  include_tasks: tasks/download/zip_download.yml
+  when: install_type == 'zip'
+
+- name: Download Native RHEL/Centos Install
+  include_tasks: tasks/download/centos-redhat_native_download.yml
+  when: install_type == 'native' and (ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat")
+
+- name: Download Native Debian/Ubuntu Install
+  include_tasks: tasks/download/debian-ubuntu_native_download.yml
+  when: install_type == 'native' and (ansible_facts['distribution'] == "Ubuntu" or ansible_facts['distribution'] == "Debian")
+
+- name: Download tar.gz
+  include_tasks: tasks/download/tar.gz
+  when: install_type == 'tar.gz'

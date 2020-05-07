@@ -1,0 +1,38 @@
+---
+dist: bionic
+os: linux
+language: python
+services:
+  - docker
+
+before_install:
+  - sudo apt-get -qq update
+
+env:
+  global:
+    - COLLECTION_NAMESPACE: serienmorder
+    - COLLECTION_NAME: artifactory
+  jobs:
+    - ROLE=artifactory_install MOLECULE_DISTRO=centos:7 MOLECULE_SERVICE_MANAGER=systemd MOLECULE_COMMAND=/usr/sbin/init
+    - ROLE=artifactory_install MOLECULE_DISTRO=centos:8 MOLECULE_SERVICE_MANAGER=systemd MOLECULE_COMMAND=/usr/sbin/init
+    - ROLE=artifactory_install MOLECULE_DISTRO=ubuntu:18.04 MOLECULE_SERVICE_MANAGER=systemd MOLECULE_COMMAND=/lib/systemd/systemd
+    #- ROLE=artifactory_install MOLECULE_DISTRO=ubuntu:20.04 MOLECULE_SERVICE_MANAGER=systemd MOLECULE_COMMAND=/lib/systemd/systemd
+
+    - ROLE=artifactory_api MOLECULE_DISTRO=centos:7 MOLECULE_SERVICE_MANAGER=systemd MOLECULE_COMMAND=/usr/sbin/init
+    - ROLE=artifactory_api MOLECULE_DISTRO=centos:8 MOLECULE_SERVICE_MANAGER=systemd MOLECULE_COMMAND=/usr/sbin/init
+    - ROLE=artifactory_api MOLECULE_DISTRO=ubuntu:18.04 MOLECULE_SERVICE_MANAGER=systemd MOLECULE_COMMAND=/lib/systemd/systemd
+    #- ROLE=artifactory_api MOLECULE_DISTRO=ubuntu:20.04 MOLECULE_SERVICE_MANAGER=systemd MOLECULE_COMMAND=/lib/systemd/systemd
+
+jobs:
+  fast_finish: true
+install:
+  - pip install molecule yamllint ansible-lint docker
+
+before_script:
+  - cd ../
+  - mkdir -p ansible_collections/$COLLECTION_NAMESPACE
+  - mv $COLLECTION_NAME ansible_collections/$COLLECTION_NAMESPACE/$COLLECTION_NAME
+  - cd ansible_collections/$COLLECTION_NAMESPACE/$COLLECTION_NAME
+
+script:
+  - molecule test --scenario-name $ROLE

@@ -1,0 +1,10 @@
+---
+- name: Ensure Download Dir exists
+  file:
+    state: directory
+    path: "{{ artifactory_download_dir }}"
+    
+
+#- name: check to see install version is newer than installed version
+
+#- name: Download Artifactory

@@ -1,0 +1,6 @@
+---
+- name: Retreive Repo file and put into place.
+  get_url:
+    url: "{{ artifactory_rpm_repo }}"
+    dest: /etc/yum.repos.d/bintray-jfrog-artifactory-oss-rpms.repo
+    checksum: sha1:{{ artifactory_rpm_repo_checksum }}
