@@ -1,0 +1,5 @@
+---
+- name: Install RPM.
+  yum:
+    name: "jfrog-artifactory-{{ artifactory_flavour }}"
+    state: latest

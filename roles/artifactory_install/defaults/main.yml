@@ -1,6 +1,6 @@
 ---
 #options are oss, ce, pro, enterprise
-artifactory_product_to_install: oss
+artifactory_flavour: oss
 
 #options are native, zip, tar.gz
 install_type: native
