@@ -1,6 +1,5 @@
 ---
----
-- name: Install RPM.
+- name: Install apt package.
   apt:
-    name: "jfrog-artifactory-{{ artifactory_flavour }}"
+    name: "jfrog-artifactory-pro"
     state: latest

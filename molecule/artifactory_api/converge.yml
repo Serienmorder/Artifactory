@@ -26,7 +26,7 @@
       collections:
         - ansible.legacy
       vars:
-        java_packages: java-1.8.0-openjdk
+        java_packages: java-11-openjdk
       when: ansible_os_family == "RedHat" or ansible_os_family == "CentOS"
     - name: Install Java
       include_role:
@@ -34,7 +34,7 @@
       collections:
         - ansible.legacy
       vars:
-        java_packages: openjdk-8-jdk
+        java_packages: openjdk-11-jdk
       when: ansible_os_family == "Debian" or ansible_os_family == "Ubuntu"
     - name: Install Artifactory
       include_role:
