@@ -3,9 +3,8 @@
   template:
     src: artifactory_configuration.j2
     dest: "{{ JFROG_home_directory }}/var/etc/potato.yml"
+    owner: artifactory
+    group: artifactory
 
 - name: Echo file contents
-  debug:
-    var: item
-  with_file:
-    - "{{ JFROG_home_directory }}/var/etc/potato.yml"
+  command: "cat {{ JFROG_home_directory|quote }}/var/etc/potato.yml"
