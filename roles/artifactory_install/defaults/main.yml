@@ -27,3 +27,5 @@ artifactory_apt_key_id: A3D085F542F740BBD7E3A2846B219DCCD7639232
 java_home:
 
 max_size_Mb: 84574765
+
+web_port: 8081

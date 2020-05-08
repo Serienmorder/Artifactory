@@ -1,4 +1,5 @@
 shared:
+
     {%+ if java_home|default(false) -%}
       javaHome: {{java_home}}
     {%+ else -%}
@@ -9,7 +10,9 @@ shared:
     {%+ else -%}
       #extraJavaOpts: "-Xms512m -Xmx2g"
     {%+ endif -%}
+
     security:
+
         {%+ if join_key|default(false) -%}
             joinkey: {{join_key}}
         {%+ else -%}
@@ -30,13 +33,17 @@ shared:
         {%+ else -%}
             #bootstrapKeysReadTimeoutSecs: 120
         {%+ endif -%}
+
     logging:
+
         consoleLog:
+
             {%+ if console_log_enabled|default(false) -%}
                 enabled: {{console_log_enabled}}
             {%+ else -%}
                 #enabled: true
             {%+ endif -%}
+
         rotation: 
             {%+ if max_size_Mb|default(false) -%}
                 maxSizeMb: {{max_size_Mb}}
@@ -53,10 +60,119 @@ shared:
             {%+ else -%}
                 #compress: true
             {%+ endif -%}
+
     node:
+
         {%+ if node_id|default(false) -%}
             id: {{node_id}}
         {%+ else -%}
             #id: "art1"
         {%+ endif -%}
+        {%+ if node_ip|default(false) -%}
+            ip: {{node_ip}}
+        {%+ else -%}
+            #ip:
+        {%+ endif -%}
+        {%+ if is_ha_primary|default(false) -%}
+            primary: {{is_ha_primary}}
+        {%+ else -%}
+            #primary: true
+        {%+ endif -%}
+        {%+ if ha_enabled|default(false) -%}
+            haEnabled: {{ha_enabled}}
+        {%+ else -%}
+            #haEnabled: true
+        {%+ endif -%}
+
+    database:
+
+        {%+ if db.type|default(false) -%}
+            type: {{db.type}}
+        {%+ else -%}
+            #type: postgresql
+        {%+ endif -%}
+        {%+ if db.driver|default(false) -%}
+            driver: {{db.driver}}
+        {%+ else -%}
+            #driver: org.postgresql.Driver
+        {%+ endif -%}
+        {%+ if db.url|default(false) -%}
+            url: {{db.url}}
+        {%+ else -%}
+            #url: jdbc:postgresql://<your db url, for example: localhost:5432>/artifactory
+        {%+ endif -%}
+        {%+ if db.username|default(false) -%}
+            username: {{db.username}}
+        {%+ else -%}
+            #username: artifactory
+        {%+ endif -%}
+        {%+ if db.password|default(false) -%}
+            password: {{db.password}}
+        {%+ else -%}
+            #password: password
+        {%+ endif -%}
+
+    script:
+        {%+ if service_start_timeout|default(false) -%}
+            serviceStartTimeout: {{service_start_timeout}}
+        {%+ else -%}
+            #serviceStartTimeout: 60
+        {%+ endif -%}
+
+    env:
+            {%+ if shared_environment_vars|default(false) -%}
+                {%+ for env_var in shared_environment_vars|dict2items -%}
+                    {{ env_var.key }}: {{ env_var.value }}
+                {%+ endfor -%}
+            {%+ else -%}
+                #EXAMPLE_VAR: example-value
+                #LD_LIBRARY_PATH: /usr/lib64
+            {%+ endif -%}
+
+artifactory:
+    {%+ if web_port|default(false) -%}
+        port: {{web_port}}
+    {%+ else -%}
+        #port: 8081
+    {%+ endif -%}
+
+    database:
+        {%+ if db.max_open_connections|default(false) -%}
+            maxOpenConnections: {{ db.max_open_connections }}
+        {%+ else -%}
+            #maxOpenConnections: 100
+        {%+ endif -%}
+        {%+ if db.max_idle_connections|default(false) -%}
+            maxIdleConnections: {{ db.max_idle_connections }}
+        {%+ else -%}
+            #maxIdleConnections: 10
+        {%+ endif -%}
+        {%+ if db.pool_type|default(false) -%}
+            poolType: {{ db.pool_type }}
+        {%+ else -%}
+            #poolType: "tomcat-jdbc"
+        {%+ endif -%}
+
+    tomcat:
+
+        connector:
+        
+            {%+ if tomcat.connector.max_threads|default(false) -%}
+                maxThreads: {{ tomcat.connector.max_threads }}
+            {%+ else -%}
+                #maxThreads: 200
+            {%+ endif -%}
+            {%+ if tomcat.connector.extra_config|default(false) -%}
+                extraConfig: {{ tomcat.connector.extra_config }}
+            {%+ else -%}
+                #extraConfig: ""
+            {%+ endif -%}
+
+        maintenanceConnector:
+
+            {%+ if tomcat.maintenance_connector.port|default(false) -%}
+                port: {{ tomcat.maintenance_connector.port }}
+            {%+ else -%}
+                #port: 8091
+            {%+ endif -%}
         
