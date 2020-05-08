@@ -3,3 +3,5 @@
   include_tasks: download/main.yml
 - name: Install
   include_tasks: install/main.yml
+- name: Configure
+  include_tasks: configuration.yml

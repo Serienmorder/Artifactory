@@ -9,7 +9,7 @@ install_type: native
 upgrades: false
 
 #Home directory for the JFrog application
-JFROG_home_directory: /opt
+JFROG_home_directory: /opt/jfrog/artifactory
 
 version_to_install: 6.9.6
 
@@ -21,3 +21,7 @@ artifactory_rpm_repo_checksum: 5cbc547fdd414bf9880c78594a89ddb5d36cd5dc
 artifactory_apt_repo: https://jfrog.bintray.com/artifactory-pro-debs
 artifactory_apt_key: https://api.bintray.com/orgs/jfrog/keys/gpg/public.key
 artifactory_apt_key_id: A3D085F542F740BBD7E3A2846B219DCCD7639232
+
+
+#Configuration section
+java_home:

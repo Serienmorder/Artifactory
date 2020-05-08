@@ -1,0 +1,11 @@
+shared:
+  {% if java_home|default(false) %}
+    javaHome:{{java_home}}
+  {% else %}
+    #javaHome: "JFROG_HOME/artifactory/app/third-party/java"
+  {% endif %}
+  {% if extra_Java_Opts|default(false) %}
+    extraJavaOpts:{{extra_Java_Opts}}
+  {% else %}
+    #extraJavaOpts: "-Xms512m -Xmx2g"
+  {% endif %}
