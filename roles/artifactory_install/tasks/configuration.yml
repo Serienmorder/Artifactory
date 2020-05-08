@@ -7,5 +7,5 @@
 - name: Echo file contents
   debug:
     var: item
-  with_files:
+  with_file:
     - "{{ JFROG_home_directory }}/var/etc/potato.yml"
