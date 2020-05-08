@@ -1,11 +1,62 @@
 shared:
-  {% if java_home|default(false) %}
-    javaHome:{{java_home}}
-  {% else %}
-    #javaHome: "JFROG_HOME/artifactory/app/third-party/java"
-  {% endif %}
-  {% if extra_Java_Opts|default(false) %}
-    extraJavaOpts:{{extra_Java_Opts}}
-  {% else %}
-    #extraJavaOpts: "-Xms512m -Xmx2g"
-  {% endif %}
+    {%+ if java_home|default(false) -%}
+      javaHome: {{java_home}}
+    {%+ else -%}
+      #javaHome:"java_home/artifactory/app/third-party/java"
+    {%+ endif -%}
+    {%+ if extra_Java_Opts|default(false) -%}
+      extraJavaOpts: {{extra_Java_Opts}}
+    {%+ else -%}
+      #extraJavaOpts: "-Xms512m -Xmx2g"
+    {%+ endif -%}
+    security:
+        {%+ if join_key|default(false) -%}
+            joinkey: {{join_key}}
+        {%+ else -%}
+            #joinKey: "<Your joinKey>"
+        {%+ endif -%}
+        {%+ if join_key_file|default(false) -%}
+            joinKeyFile: {{join_key_file}}
+        {%+ else -%}
+            #joinKeyFile: "<For example: JFROG_HOME/artifactory/var/etc/security/join.key>"
+        {%+ endif -%}
+        {%+ if master_key_file|default(false) -%}
+            masterKeyFile: {{master_key_file}}
+        {%+ else -%}
+            #masterKeyFile: "<For example: JFROG_HOME/artifactory/var/etc/security/master.key>"
+        {%+ endif -%}
+        {%+ if bootstrap_keys_read_timeout_secs|default(false) -%}
+            bootstrapKeysReadTimeoutSecs: {{bootstrap_keys_read_timeout_secs}}
+        {%+ else -%}
+            #bootstrapKeysReadTimeoutSecs: 120
+        {%+ endif -%}
+    logging:
+        consoleLog:
+            {%+ if console_log_enabled|default(false) -%}
+                enabled: {{console_log_enabled}}
+            {%+ else -%}
+                #enabled: true
+            {%+ endif -%}
+        rotation: 
+            {%+ if max_size_Mb|default(false) -%}
+                maxSizeMb: {{max_size_Mb}}
+            {%+ else -%}
+                #maxSizeMb: 25
+            {%+ endif -%}
+            {%+ if max_files|default(false) -%}
+                maxFiles: {{max_files}}
+            {%+ else -%}
+                #maxFiles: 10
+            {%+ endif -%}
+            {%+ if compress_backup|default(false) -%}
+                compress: {{compress_backup}}
+            {%+ else -%}
+                #compress: true
+            {%+ endif -%}
+    node:
+        {%+ if node_id|default(false) -%}
+            id: {{node_id}}
+        {%+ else -%}
+            #id: "art1"
+        {%+ endif -%}
+        
