@@ -156,7 +156,7 @@ artifactory:
     tomcat:
 
         connector:
-        
+
             {%+ if tomcat.connector.max_threads|default(false) -%}
                 maxThreads: {{ tomcat.connector.max_threads }}
             {%+ else -%}
@@ -175,4 +175,58 @@ artifactory:
             {%+ else -%}
                 #port: 8091
             {%+ endif -%}
+            {%+ if tomcat.maintenance_connector.max_threads|default(false) -%}
+                maxThreads: {{ tomcat.maintenance_connector.max_threads }}
+            {%+ else -%}
+                #maxThreads: 5
+            {%+ endif -%}
+            {%+ if tomcat.maintenance_connector.accept_count|default(false) -%}
+                acceptCount: {{ tomcat.maintenance_connector.accept_count }}
+            {%+ else -%}
+                #acceptCount: 5
+            {%+ endif -%}
+            {%+ if tomcat.maintenance_connector.extra_config|default(false) -%}
+                extraConfig: {{ tomcat.maintenance_connector.extra_config }}
+            {%+ else -%}
+                #extraConfig: ""
+            {%+ endif -%}
+        
+        httpsConnector:
+
+            {%+ if tomcat.https_connector.enabled|default(false) -%}
+                enabled: {{ tomcat.https_connector.enabled }}
+            {%+ else -%}
+                #enabled: false
+            {%+ endif -%}
+            {%+ if tomcat.https_connector.port_number|default(false) -%}
+                port: {{ tomcat.https_connector.port_number }}
+            {%+ else -%}
+                #port: 8443
+            {%+ endif -%}
+            {%+ if tomcat.https_connector.certificate_file|default(false) -%}
+                certificateFile: {{ tomcat.https_connector.certificate_file }}
+            {%+ else -%}
+                #certificateFile: "$JFROG_HOME/artifactory/var/etc/artifactory/security/ssl/server.crt"
+            {%+ endif -%}
+            {%+ if tomcat.https_connector.certificate_key_file|default(false) -%}
+                certificateFile: {{ tomcat.https_connector.certificate__key_file }}
+            {%+ else -%}
+                #certificateKeyFile: "$JFROG_HOME/artifactory/var/etc/artifactory/security/ssl/server.key"
+            {%+ endif -%}
+            {%+ if tomcat.https_connector.extra_config|default(false) -%}
+                extraConfig: {{ tomcat.https_connector.extra_config }}
+            {%+ else -%}
+                #extraConfig: ""
+            {%+ endif -%}
+    env:
+            {%+ if artifactory_environment_vars|default(false) -%}
+                {%+ for env_var in artifactory_environment_vars|dict2items -%}
+                    {{ env_var.key }}: {{ env_var.value }}
+                {%+ endfor -%}
+            {%+ else -%}
+                #EXAMPLE_VAR: example-value
+                #LD_LIBRARY_PATH: /usr/lib64
+            {%+ endif -%}
+        
+
         
