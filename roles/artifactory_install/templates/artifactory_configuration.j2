@@ -219,14 +219,540 @@ artifactory:
                 #extraConfig: ""
             {%+ endif -%}
     env:
-            {%+ if artifactory_environment_vars|default(false) -%}
-                {%+ for env_var in artifactory_environment_vars|dict2items -%}
+            {%+ if artifactory.environment_vars|default(false) -%}
+                {%+ for env_var in artifactory.environment_vars|dict2items -%}
                     {{ env_var.key }}: {{ env_var.value }}
                 {%+ endfor -%}
             {%+ else -%}
                 #EXAMPLE_VAR: example-value
                 #LD_LIBRARY_PATH: /usr/lib64
             {%+ endif -%}
-        
-
-        
+access:
+    {%+ if access.http_port|default(false) -%}
+        http: 
+            port: {{ access.http_port }}
+    {%+ else -%}
+        http:
+            #port: 8040
+    {%+ endif -%}
+    {%+ if access.grpc_port|default(false) -%}
+        grpc: 
+            port: {{ access.grpc_port }}
+    {%+ else -%}
+        grpc_port:
+            #port: 8040
+    {%+ endif -%}
+    database:
+        {%+ if access.database.username|default(false) -%}
+            username: {{ access.database.username }}
+        {%+ else -%}
+            #username: "username"
+        {%+ endif -%}
+        {%+ if access.database.password|default(false) -%}
+            password: {{ access.database.password }}
+        {%+ else -%}
+            #password: "password"
+        {%+ endif -%}
+        {%+ if access.database.type|default(false) -%}
+            type: {{ access.database.type }}
+        {%+ else -%}
+            #type: "derby"
+        {%+ endif -%}
+        {%+ if access.database.url|default(false) -%}
+            url: {{ access.database.url }}
+        {%+ else -%}
+            #url: "jdbc:derby:<DERBY_DB_HOME_PLACE_HOLDER>;create=true"
+        {%+ endif -%}
+        {%+ if access.database.driver|default(false) -%}
+            driver: {{ access.database.driver }}
+        {%+ else -%}
+            #driver: "org.apache.derby.jdbc.EmbeddedDriver"
+        {%+ endif -%}
+        {%+ if access.database.max_open_connections|default(false) -%}
+            maxOpenConnections: {{ access.database.max_open_connections }}
+        {%+ else -%}
+            #maxOpenConnections: 100
+        {%+ endif -%}
+        {%+ if access.database.max_idle_connections|default(false) -%}
+            maxIdleConnections: {{ access.database.max_idle_connections }}
+        {%+ else -%}
+            #maxIdleConnections: 10
+        {%+ endif -%}
+        {%+ if access.database.pool_type|default(false) -%}
+            poolType: {{ access.database.pool_type }}
+        {%+ else -%}
+            #poolType: "tomcat-jdbc"
+        {%+ endif -%}
+    tomcat:
+        connector:
+            {%+ if access.tomcat.connector.max_threads|default(false) -%}
+                maxThreads: {{ access.tomact.connector.max_threads }}
+            {%+ else -%}
+                #maxThreads: 50
+            {%+ endif -%}
+            {%+ if access.tomcat.connector.extra_config|default(false) -%}
+                extraConfig: {{ access.tomcat.connector.extra_config }}
+            {%+ else -%}
+                #extraConfig: ""
+            {%+ endif -%}
+    env:
+            {%+ if access.environment_vars|default(false) -%}
+                {%+ for env_var in access.environment_vars|dict2items -%}
+                    {{ env_var.key }}: {{ env_var.value }}
+                {%+ endfor -%}
+            {%+ else -%}
+                #EXAMPLE_VAR: example-value
+                #LD_LIBRARY_PATH: /usr/lib64
+            {%+ endif -%}
+frontend:
+    {%+ if frontend.port|default(false) -%}
+        port: {{ frontend.port }}
+    {%+ else -%}
+        #port: 8070
+    {%+ endif -%}    
+    session:
+        {%+ if frontend.session.time_minutes|default(false) -%}
+            timeMinutes: {{ frontend.session.time_minutes }}
+        {%+ else -%}
+            #timeMinutes: '30'
+        {%+ endif -%}   
+    logging:
+        application:
+            {%+ if frontend.logging.application.level|default(false) -%}
+                level: {{ frontend.logging.application.level }}
+            {%+ else -%}
+                ## The log level: error, warning, info, debug, trace
+                #level: info
+            {%+ endif -%}  
+            rotation:
+                {%+ if frontend.logging.application.rotation.max_size_Mb|default(false) -%}
+                    maxSizeMb: {{ frontend.logging.application.rotation.max_size_Mb }}
+                {%+ else -%}
+                    #maxSizeMb: 10
+                {%+ endif -%} 
+                {%+ if frontend.logging.application.rotation.max_files|default(false) -%}
+                    maxFiles: {{ frontend.logging.application.rotation.max_files }}
+                {%+ else -%}
+                    #maxFiles: 10
+                {%+ endif -%} 
+        request:
+            rotation:
+                {%+ if frontend.logging.request.rotation.max_size_Mb|default(false) -%}
+                    maxSizeMb: {{ frontend.logging.request.rotation.max_size_Mb }}
+                {%+ else -%}
+                    #maxSizeMb: 10
+                {%+ endif -%} 
+                {%+ if frontend.logging.request.rotation.max_files|default(false) -%}
+                    maxFiles: {{ frontend.logging.request.rotation.max_files }}
+                {%+ else -%}
+                    #maxFiles: 10
+                {%+ endif -%} 
+    env:
+            {%+ if frontend.environment_vars|default(false) -%}
+                {%+ for env_var in frontend.environment_vars|dict2items -%}
+                    {{ env_var.key }}: {{ env_var.value }}
+                {%+ endfor -%}
+            {%+ else -%}
+                #EXAMPLE_VAR: example-value
+                #LD_LIBRARY_PATH: /usr/lib64
+            {%+ endif -%}
+metadata:
+    {%+ if metadata.port|default(false) -%}
+        port: {{ metadata.port }}
+    {%+ else -%}
+        #port: 8086
+    {%+ endif -%}
+    database:
+         {%+ if metadata.database.max_open_connections|default(false) -%}
+            maxOpenConnections: {{ metadata.database.max_open_connections }}
+        {%+ else -%}
+            #maxOpenConnections: 100
+        {%+ endif -%}
+    logging:
+        application:
+            {%+ if metadata.logging.application.level|default(false) -%}
+                level: {{ metadata.logging.application.level }}
+            {%+ else -%}
+                ## The log level: error, warning, info, debug, trace
+                #level: info
+            {%+ endif -%}
+            {%+ if metadata.logging.application.console|default(false) -%}
+                console: {{ metadata.logging.application.console }}
+            {%+ else -%}
+                #console: true
+            {%+ endif -%}
+            packages:
+                {%+ if metadata.logging.application.common|default(false) -%}
+                    common:
+                        level: {{ metadata.logging.application.common }}
+                {%+ else -%}
+                    #common:
+                    #  level: debug
+                {%+ endif -%}
+                {%+ if metadata.logging.application.daos|default(false) -%}
+                    daos:
+                        level: {{ metadata.logging.application.daos }}
+                {%+ else -%}
+                    #daos:
+                    #  level: warning
+                {%+ endif -%}
+            rotation:
+                {%+ if metadata.logging.application.rotation.max_age_days|default(false) -%}
+                    maxAgeDays: {{ metadata.logging.application.rotation.max_age_days }}
+                {%+ else -%}
+                    #maxAgeDays: 365
+                {%+ endif -%}
+                {%+ if metadata.logging.application.rotation.max_files|default(false) -%}
+                    maxFiles: {{ metadata.logging.application.rotation.max_files }}
+                {%+ else -%}
+                    #maxFiles: 100
+                {%+ endif -%}
+                {%+ if metadata.logging.application.rotation.max_size_Mb|default(false) -%}
+                    maxSizeMb: {{ metadata.logging.application.rotation.max_size_Mb }}
+                {%+ else -%}
+                    #maxSizeMb: 25
+                {%+ endif -%}
+                {%+ if metadata.logging.application.rotation.compress|default(false) -%}
+                    compress: {{ metadata.logging.application.rotation.max_size_Mb }}
+                {%+ else -%}
+                    #compress: true
+                {%+ endif -%}
+        request:
+            {%+ if metadata.logging.request|default(false) -%}
+                console: {{ metadata.logging.request }}
+            {%+ else -%}
+                #console: false
+            {%+ endif -%}
+            rotation:
+                {%+ if metadata.logging.request.rotation.max_age_days|default(false) -%}
+                    maxAgeDays: {{ metadata.logging.request.rotation.max_age_days }}
+                {%+ else -%}
+                    #maxAgeDays: 365
+                {%+ endif -%}
+                {%+ if metadata.logging.request.rotation.max_files|default(false) -%}
+                    maxFiles: {{ metadata.logging.request.rotation.max_files }}
+                {%+ else -%}
+                    #maxFiles: 100
+                {%+ endif -%}
+                {%+ if metadata.logging.request.rotation.max_size_Mb|default(false) -%}
+                    maxSizeMb: {{ metadata.logging.request.rotation.max_size_Mb }}
+                {%+ else -%}
+                    #maxSizeMb: 25
+                {%+ endif -%}
+                {%+ if metadata.logging.request.rotation.compress|default(false) -%}
+                    compress: {{ metadata.logging.request.rotation.compress }}
+                {%+ else -%}
+                    #compress: true
+                {%+ endif -%}
+    profiling:
+        {%+ if metadata.profiling|default(false) -%}
+            enabled: {{ metadata.profiling }}
+        {%+ else -%}
+            #enabled: true
+        {%+ endif -%}
+    env:
+            {%+ if metadata.environment_vars|default(false) -%}
+                {%+ for env_var in metadata.environment_vars|dict2items -%}
+                    {{ env_var.key }}: {{ env_var.value }}
+                {%+ endfor -%}
+            {%+ else -%}
+                #EXAMPLE_VAR: example-value
+                #LD_LIBRARY_PATH: /usr/lib64
+            {%+ endif -%}
+    tokencache:
+        {%+ if metadata.token_cache_timeout|default(false) -%}
+            timeout: {{ metadata.token_cache_timeout }}
+        {%+ else -%}
+            #timeout: 115s
+        {%+ endif -%}
+router:
+    profiling: 
+        {%+ if router.profiling.enabled|default(false) -%}
+            enabled: {{ router.profiling.enabled }}
+        {%+ else -%}
+            #enabled: true
+        {%+ endif -%}
+    proxy:
+        {%+ if router.proxy.http_url|default(false) -%}
+            httpUrl: {{ router.proxy.http_url }}
+        {%+ else -%}
+            #httpUrl: ""
+        {%+ endif -%}
+        {%+ if router.proxy.https_url|default(false) -%}
+            httpsUrl: {{ router.proxy.https_url }}
+        {%+ else -%}
+            #httpsUrl: ""
+        {%+ endif -%}
+        {%+ if router.proxy.ignored_hosts|default(false) -%}
+            {%+ for host in router.proxy.ignored_hosts -%}
+                - {{ host }}
+            {%+ endfor -%}
+        {%+ else -%}
+            #ignoredHosts:
+            #- "ignore.me.com"
+            #- "ignore.me2.com"
+        {%+ endif -%}
+    entrypoints: 
+        {%+ if router.entrypoints.internal_port|default(false) -%}
+            internalPort: {{ router.entrypoints.internal_port }}
+        {%+ else -%}
+            #internalPort: 8046
+        {%+ endif -%}
+        {%+ if router.entrypoints.external_port|default(false) -%}
+            externalPort: {{ router.entrypoints.external_port }}
+        {%+ else -%}
+            #externalPort: 8082
+        {%+ endif -%}
+        {%+ if router.entrypoints.external_port|default(false) -%}
+            externalPort: {{ router.entrypoints.external_port }}
+        {%+ else -%}
+            #externalPort: 8082
+        {%+ endif -%}
+        {%+ if router.entrypoints.trafik_api_port|default(false) -%}
+            traefikApiPort: {{ router.entrypoints.trafik_api_port }}
+        {%+ else -%}
+            #traefikApiPort: 8049
+        {%+ endif -%}
+        {%+ if router.entrypoints.grpc_port|default(false) -%}
+            grpcPort: {{ router.entrypoints.grpc_port }}
+        {%+ else -%}
+            #grpcPort: 8047
+        {%+ endif -%}
+    serviceRegistry:
+        {%+ if router.service_registry.insecure|default(false) -%}
+            insecure: {{ router.service_registry.insecure }}
+        {%+ else -%}
+            #insecure: false
+        {%+ endif -%}
+        {%+ if router.service_registry.request_timeout|default(false) -%}
+            requestTimeout: {{ router.service_registry.request_timeout }}
+        {%+ else -%}
+            #requestTimeout: 15s
+        {%+ endif -%}
+        {%+ if router.service_registry.skip_join_connectivity_test|default(false) -%}
+            skipJoinConnectivityTest: {{ router.service_registry.skip_join_connectivity_test }}
+        {%+ else -%}
+            #skipJoinConnectivityTest: false
+        {%+ endif -%}
+    topology:
+        local:
+            healthCheck:
+                {%+ if router.topology.local.health_check.interval|default(false) -%}
+                    interval: {{ router.topology.local.health_check.interval }}
+                {%+ else -%}
+                    #interval: 5s
+                {%+ endif -%}
+                {%+ if router.topology.local.health_check.request_timeout|default(false) -%}
+                    requestTimeout: {{ router.topology.local.health_check.request_timeout }}
+                {%+ else -%}
+                    #requestTimeout: 5s
+                {%+ endif -%}
+                {%+ if router.topology.local.health_check.healthy_threshold|default(false) -%}
+                    healthyThreshold: {{ router.topology.local.health_check.healthy_threshold }}
+                {%+ else -%}
+                    #healthyThreshold: 2
+                {%+ endif -%}
+                {%+ if router.topology.local.health_check.unhealthy_threshold|default(false) -%}
+                    unhealthyThreshold: {{ router.topology.local.health_check.unhealthy_threshold }}
+                {%+ else -%}
+                    #unhealthyThreshold: 2
+                {%+ endif -%}
+        external:
+            refresh:
+                {%+ if router.topology.external.refresh.interval|default(false) -%}
+                    interval: {{ router.topology.external.refresh.interval }}
+                {%+ else -%}
+                    #interval: 3s
+                {%+ endif -%}
+                {%+ if router.topology.external.refresh.max_stale_hearbeat|default(false) -%}
+                    maxStaleHeartbeat: {{ router.topology.external.refresh.max_stale_hearbeat }}
+                {%+ else -%}
+                    #maxStaleHeartbeat: 30s
+                {%+ endif -%}
+    supportBundle:
+        {%+ if router.support_bundle.aggregation_timeout|default(false) -%}
+            aggregationTimeout: {{ router.support_bundle.aggregation_timeout }}
+        {%+ else -%}
+            #aggregationTimeout: 1h
+        {%+ endif -%}
+    logging:
+        application:
+            {%+ if router.logging.application.level|default(false) -%}
+                level: {{ router.logging.application.level }}
+            {%+ else -%}
+                #level: "info"
+            {%+ endif -%}
+            {%+ if router.logging.application.format|default(false) -%}
+                format: {{ router.logging.application.format }}
+            {%+ else -%}
+                #format: "jftext"
+            {%+ endif -%}
+            {%+ if router.logging.application.caller|default(false) -%}
+                caller: {{ router.logging.application.caller }}
+            {%+ else -%}
+                #caller: false
+            {%+ endif -%}
+            {%+ if router.logging.application.console|default(false) -%}
+                console: {{ router.logging.application.console }}
+            {%+ else -%}
+                #console: true
+            {%+ endif -%}
+            rotation:
+                {%+ if router.logging.application.rotation.compress|default(false) -%}
+                    compress: {{ router.logging.application.rotation.compress }}
+                {%+ else -%}
+                    #compress: true
+                {%+ endif -%}
+                {%+ if router.logging.application.rotation.max_size_Mb|default(false) -%}
+                    maxSizeMb: {{ router.logging.application.rotation.max_size_Mb }}
+                {%+ else -%}
+                    #maxSizeMb: 25
+                {%+ endif -%}
+                {%+ if router.logging.application.rotation.max_age_days|default(false) -%}
+                    maxAgeDays: {{ router.logging.application.rotation.max_age_days }}
+                {%+ else -%}
+                    #maxAgeDays: 0
+                {%+ endif -%}
+                {%+ if router.logging.application.rotation.max_files|default(false) -%}
+                    maxFiles: {{ router.logging.application.rotation.max_files }}
+                {%+ else -%}
+                    #maxFiles: 10
+                {%+ endif -%}
+        traefik:
+            {%+ if router.logging.traefik.level|default(false) -%}
+                level: {{ router.logging.traefik.level }}
+            {%+ else -%}
+                #level: "info"
+            {%+ endif -%}
+            {%+ if router.logging.traefik.format|default(false) -%}
+                format: {{ router.logging.traefik.format }}
+            {%+ else -%}
+                #format: "jftext"
+            {%+ endif -%}
+            {%+ if router.logging.traefik.caller|default(false) -%}
+                caller: {{ router.logging.traefik.caller }}
+            {%+ else -%}
+                #caller: false
+            {%+ endif -%}
+            {%+ if router.logging.traefik.console|default(false) -%}
+                console: {{ router.logging.traefik.console }}
+            {%+ else -%}
+                #console: true
+            {%+ endif -%}
+            rotation:
+                {%+ if router.logging.traefik.rotation.compress|default(false) -%}
+                    compress: {{ router.logging.traefik.rotation.compress }}
+                {%+ else -%}
+                    #compress: true
+                {%+ endif -%}
+                {%+ if router.logging.traefik.rotation.max_size_Mb|default(false) -%}
+                    maxSizeMb: {{ router.logging.traefik.rotation.max_size_Mb }}
+                {%+ else -%}
+                    #maxSizeMb: 25
+                {%+ endif -%}
+                {%+ if router.logging.traefik.rotation.max_age_days|default(false) -%}
+                    maxAgeDays: {{ router.logging.traefik.rotation.max_age_days }}
+                {%+ else -%}
+                    #maxAgeDays: 0
+                {%+ endif -%}
+                {%+ if router.logging.traefik.rotation.max_files|default(false) -%}
+                    maxFiles: {{ router.logging.traefik.rotation.max_files }}
+                {%+ else -%}
+                    #maxFiles: 10
+                {%+ endif -%}
+        request:
+            {%+ if router.logging.request.verbose|default(false) -%}
+                verbose: {{ router.logging.request.verbose }}
+            {%+ else -%}
+                #verbose: false
+            {%+ endif -%}
+            rotation:
+                {%+ if router.logging.request.rotation.compress|default(false) -%}
+                    compress: {{ router.logging.request.rotation.compress }}
+                {%+ else -%}
+                    #compress: true
+                {%+ endif -%}
+                {%+ if router.logging.request.rotation.max_size_Mb|default(false) -%}
+                    maxSizeMb: {{ router.logging.request.rotation.max_size_Mb }}
+                {%+ else -%}
+                    #maxSizeMb: 25
+                {%+ endif -%}
+                {%+ if router.logging.request.rotation.max_age_days|default(false) -%}
+                    maxAgeDays: {{ router.logging.request.rotation.max_age_days }}
+                {%+ else -%}
+                    #maxAgeDays: 0
+                {%+ endif -%}
+                {%+ if router.logging.request.rotation.max_files|default(false) -%}
+                    maxFiles: {{ router.logging.request.rotation.max_files }}
+                {%+ else -%}
+                    #maxFiles: 10
+                {%+ endif -%}
+    env:
+            {%+ if router.environment_vars|default(false) -%}
+                {%+ for env_var in router.environment_vars|dict2items -%}
+                    {{ env_var.key }}: {{ env_var.value }}
+                {%+ endfor -%}
+            {%+ else -%}
+                #EXAMPLE_VAR: example-value
+                #LD_LIBRARY_PATH: /usr/lib64
+            {%+ endif -%}
+replicator:
+    {%+ if replicator.enabled|default(false) -%}
+        enabled: {{ replicator.enabled }}
+    {%+ else -%}
+        #enabled: false
+    {%+ endif -%}
+    {%+ if replicator.port|default(false) -%}
+        port: {{ replicator.port }}
+    {%+ else -%}
+        #port: 8048
+    {%+ endif -%}
+    logging:
+        application:
+            {%+ if replicator.logging.application.level|default(false) -%}
+                level: {{ replicator.logging.application.level }}
+            {%+ else -%}
+                #level: info
+            {%+ endif -%}
+        tls:
+            {%+ if replicator.logging.tls.skip_verify_certificate|default(false) -%}
+                skipVerifyCertificate: {{ replicator.logging.tls.skip_verify_certificate }}
+            {%+ else -%}
+                #skipVerifyCertificate: false
+            {%+ endif -%}
+        profiling:
+            {%+ if replicator.logging.profiling.port|default(false) -%}
+                port: {{ replicator.logging.profiling.port }}
+            {%+ else -%}
+                #port: 8041
+            {%+ endif -%}
+            {%+ if replicator.logging.profiling.enabled|default(false) -%}
+                enabled: {{ replicator.logging.profiling.enabled }}
+            {%+ else -%}
+                #enabled: true
+            {%+ endif -%}
+            {%+ if replicator.logging.profiling.allowed_host|default(false) -%}
+                allowedHost: {{ replicator.logging.profiling.allowed_host }}
+            {%+ else -%}
+                #allowedHost: "localhost"
+            {%+ endif -%}
+        txDir:
+            {%+ if replicator.logging.tx_dir.clean_up_age_secs|default(false) -%}
+                cleanUpAgeSecs: {{ replicator.logging.tx_dir.clean_up_age_secs }}
+            {%+ else -%}
+                #cleanUpAgeSecs: 2592000
+            {%+ endif -%}
+            {%+ if replicator.logging.tx_dir.clean_up_interval_secs|default(false) -%}
+                cleanUpIntervalSecs: {{ replicator.logging.tx_dir.clean_up_interval_secs }}
+            {%+ else -%}
+                #cleanUpIntervalSecs: 3600
+            {%+ endif -%}
+    env:
+            {%+ if replicator.environment_vars|default(false) -%}
+                {%+ for env_var in replicator.environment_vars|dict2items -%}
+                    {{ env_var.key }}: {{ env_var.value }}
+                {%+ endfor -%}
+            {%+ else -%}
+                #EXAMPLE_VAR: example-value
+                #LD_LIBRARY_PATH: /usr/lib64
+            {%+ endif -%}
